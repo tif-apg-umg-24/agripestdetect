@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriPest Detect Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        green: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+    <!-- Header -->
+    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-green-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="navigate('home')">
+                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 p-2 rounded-xl shadow-lg">
+                        <i class="fas fa-leaf text-white w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                            AgriPest Detect Pro
+                        </h1>
+                        <p class="text-xs text-gray-500 hidden sm:block">AI-Powered Pest Detection</p>
+                    </div>
+                </div>
+
+                <nav class="hidden md:flex items-center space-x-1">
+                    <button onclick="navigate('home')" class="px-4 py-2 rounded-lg transition-all duration-200 font-medium text-gray-700 hover:bg-green-50 hover:text-green-600">
+                        Beranda
+                    </button>
+                    <button onclick="navigate('scanner')" class="px-4 py-2 rounded-lg transition-all duration-200 font-medium text-gray-700 hover:bg-green-50 hover:text-green-600">
+                        Scan Hama
+                    </button>
+                    <button onclick="navigate('map')" class="px-4 py-2 rounded-lg transition-all duration-200 font-medium text-gray-700 hover:bg-green-50 hover:text-green-600">
+                        Peta Hama
+                    </button>
+                    <button onclick="navigate('prediction')" class="px-4 py-2 rounded-lg transition-all duration-200 font-medium text-gray-700 hover:bg-green-50 hover:text-green-600">
+                        Prediksi
+                    </button>
+                    <button onclick="navigate('community')" class="px-4 py-2 rounded-lg transition-all duration-200 font-medium text-gray-700 hover:bg-green-50 hover:text-green-600">
+                        Komunitas
+                    </button>
+                    <button onclick="navigate('marketplace')" class="px-4 py-2 rounded-lg transition-all duration-200 font-medium text-gray-700 hover:bg-green-50 hover:text-green-600">
+                        Marketplace
+                    </button>
+                </nav>
+
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-100" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+            <nav class="px-4 py-2 space-y-1">
+                <button onclick="navigate('home')" class="w-full text-left px-4 py-3 rounded-lg transition-all duration-200 font-medium text-gray-700 hover:bg-green-50">
+                    Beranda
+                </button>
+                <button onclick="navigate('scanner')" class="w-full text-left px-4 py-3 rounded-lg transition-all duration-200 font-medium text-gray-700 hover:bg-green-50">
+                    Scan Hama
+                </button>
+                <button onclick="navigate('map')" class="w-full text-left px-4 py-3 rounded-lg transition-all duration-200 font-medium text-gray-700 hover:bg-green-50">
+                    Peta Hama
+                </button>
+                <button onclick="navigate('prediction')" class="w-full text-left px-4 py-3 rounded-lg transition-all duration-200 font-medium text-gray-700 hover:bg-green-50">
+                    Prediksi
+                </button>
+                <button onclick="navigate('community')" class="w-full text-left px-4 py-3 rounded-lg transition-all duration-200 font-medium text-gray-700 hover:bg-green-50">
+                    Komunitas
+                </button>
+                <button onclick="navigate('marketplace')" class="w-full text-left px-4 py-3 rounded-lg transition-all duration-200 font-medium text-gray-700 hover:bg-green-50">
+                    Marketplace
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pb-16">
+        <!-- Hero Section -->
+        <section id="home-section" class="relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-8">
+                        <div class="inline-flex items-center px-4 py-2 bg-green-100 rounded-full">
+                            <i class="fas fa-shield-alt text-green-600 mr-2"></i>
+                            <span class="text-sm font-semibold text-green-700">AI-Powered Technology</span>
+                        </div>
+
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+                            Lindungi Tanaman Anda dengan
+                            <span class="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent block">
+                                Deteksi AI
+                            </span>
+                        </h1>
+
+                        <p class="text-lg text-gray-600 leading-relaxed">
+                            AgriPest Detect Pro menggunakan teknologi AI canggih untuk mendeteksi hama secara real-time,
+                            memprediksi serangan, dan memberikan solusi ramah lingkungan untuk meningkatkan hasil panen Anda.
+                        </p>
+
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button onclick="navigate('scanner')" class="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                                Mulai Scan Sekarang
+                            </button>
+                            <button class="px-8 py-4 bg-white text-gray-700 font-semibold rounded-xl shadow-md hover:shadow-lg border-2 border-gray-200 hover:border-green-500 transition-all duration-200">
+                                Lihat Demo
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-6 pt-8">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-green-600">99%</div>
+                                <div class="text-sm text-gray-600 mt-1">Akurasi AI</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-green-600">50K+</div>
+                                <div class="text-sm text-gray-600 mt-1">Petani Aktif</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-green-600">24/7</div>
+                                <div class="text-sm text-gray-600 mt-1">Support AI</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="relative z-10 bg-white rounded-2xl shadow-2xl p-8 transform hover:scale-105 transition-all duration-300">
+                            <div class="aspect-square bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl flex items-center justify-center mb-6">
+                                <i class="fas fa-camera text-green-500 text-8xl"></i>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-3 bg-green-50 p-4 rounded-lg">
+                                    <i class="fas fa-camera text-green-600"></i>
+                                    <span class="font-medium text-gray-700">Real-time Detection</span>
+                                </div>
+                                <div class="flex items-center space-x-3 bg-blue-50 p-4 rounded-lg">
+                                    <i class="fas fa-chart-line text-blue-600"></i>
+                                    <span class="font-medium text-gray-700">AI Prediction</span>
+                                </div>
+                                <div class="flex items-center space-x-3 bg-purple-50 p-4 rounded-lg">
+                                    <i class="fas fa-map-marker-alt text-purple-600"></i>
+                                    <span class="font-medium text-gray-700">Pest Mapping</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="absolute -top-4 -right-4 w-72 h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+                        <div class="absolute -bottom-4 -left-4 w-72 h-72 bg-emerald-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features-section" class="py-16 sm:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+                        Fitur Lengkap untuk
+                        <span class="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                            Pertanian Modern
+                        </span>
+                    </h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                        Teknologi AI terdepan untuk membantu petani meningkatkan produktivitas dan mengurangi kerugian
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Feature items would go here -->
+                    <div onclick="navigate('scanner')" class="group cursor-pointer bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 hover:border-green-200">
+                        <div class="bg-green-50 w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <div class="bg-gradient-to-br from-green-500 to-emerald-600 p-2 rounded-lg">
+                                <i class="fas fa-camera text-white w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-gray-800 mb-2 group-hover:text-green-600 transition-colors">
+                            Scan Hama Real-Time
+                        </h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">Deteksi hama langsung melalui kamera dengan AI detection</p>
+                    </div>
+
+                    <div onclick="navigate('map')" class="group cursor-pointer bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 hover:border-green-200">
+                        <div class="bg-blue-50 w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <div class="bg-gradient-to-br from-blue-500 to-cyan-600 p-2 rounded-lg">
+                                <i class="fas fa-map-marker-alt text-white w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-gray-800 mb-2 group-hover:text-green-600 transition-colors">
+                            Peta Persebaran Hama
+                        </h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">Monitoring persebaran hama berdasarkan geolocation</p>
+                    </div>
+
+                    <div onclick="navigate('prediction')" class="group cursor-pointer bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 hover:border-green-200">
+                        <div class="bg-purple-50 w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <div class="bg-gradient-to-br from-purple-500 to-pink-600 p-2 rounded-lg">
+                                <i class="fas fa-chart-line text-white w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-gray-800 mb-2 group-hover:text-green-600 transition-colors">
+                            Prediksi Serangan
+                        </h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">AI memprediksi serangan hama berdasarkan cuaca & pola</p>
+                    </div>
+
+                    <div onclick="navigate('assistant')" class="group cursor-pointer bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 hover:border-green-200">
+                        <div class="bg-lime-50 w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <div class="bg-gradient-to-br from-lime-500 to-green-600 p-2 rounded-lg">
+                                <i class="fas fa-leaf text-white w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-gray-800 mb-2 group-hover:text-green-600 transition-colors">
+                            Rekomendasi Organik
+                        </h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">Saran pestisida organik & DIY yang aman lingkungan</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scanner Section -->
+        <section id="scanner-section" class="hidden py-12 min-h-screen">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-8">
+                    <button onclick="navigate('home')" class="text-green-600 hover:text-green-700 font-medium mb-4">
+                        ← Kembali
+                    </button>
+                    <h1 class="text-3xl sm:text-4xl font-bold mb-3">Scan Hama Real-Time</h1>
+                    <p class="text-gray-600">Deteksi hama pada tanaman Anda menggunakan teknologi AI</p>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                    <div class="bg-gradient-to-r from-green-500 to-emerald-600 p-6">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-camera text-white w-8 h-8"></i>
+                            <div>
+                                <h2 class="text-xl font-bold text-white">AI Detection System</h2>
+                                <p class="text-green-100 text-sm">Powered by Deep Learning</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 sm:p-8">
+                        <div class="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl flex items-center justify-center mb-6 relative overflow-hidden">
+                            <div class="text-center">
+                                <i class="fas fa-camera text-gray-600 text-6xl mb-4 mx-auto"></i>
+                                <p class="text-gray-400">Kamera siap digunakan</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <button onclick="startScan()" class="flex items-center justify-center space-x-2 px-6 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                                <i class="fas fa-camera w-5 h-5"></i>
+                                <span>Mulai Scan</span>
+                            </button>
+                            <button class="flex items-center justify-center space-x-2 px-6 py-4 bg-white text-gray-700 font-semibold rounded-xl shadow-md hover:shadow-lg border-2 border-gray-200 hover:border-green-500 transition-all duration-200">
+                                <i class="fas fa-upload w-5 h-5"></i>
+                                <span>Upload Foto</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pest Map Section -->
+        <section id="map-section" class="hidden py-12 min-h-screen">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-8">
+                    <button onclick="navigate('home')" class="text-green-600 hover:text-green-700 font-medium mb-4">
+                        ← Kembali
+                    </button>
+                    <h1 class="text-3xl sm:text-4xl font-bold mb-3">Peta Persebaran Hama</h1>
+                    <p class="text-gray-600">Monitoring real-time serangan hama di berbagai wilayah</p>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-gradient-to-br from-red-500 to-orange-500 rounded-xl p-6 text-white shadow-lg">
+                        <i class="fas fa-exclamation-triangle w-8 h-8 mb-3 opacity-80"></i>
+                        <div class="text-3xl font-bold mb-1">12</div>
+                        <div class="text-red-100">Area Tingkat Tinggi</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl p-6 text-white shadow-lg">
+                        <i class="fas fa-chart-line w-8 h-8 mb-3 opacity-80"></i>
+                        <div class="text-3xl font-bold mb-1">28</div>
+                        <div class="text-yellow-100">Area Tingkat Sedang</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl p-6 text-white shadow-lg">
+                        <i class="fas fa-users w-8 h-8 mb-3 opacity-80"></i>
+                        <div class="text-3xl font-bold mb-1">2,450</div>
+                        <div class="text-blue-100">Petani Terdampak</div>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                        <div class="bg-gradient-to-r from-blue-500 to-cyan-600 p-6">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-map-marker-alt w-6 h-6 text-white"></i>
+                                <h2 class="text-xl font-bold text-white">Peta Interaktif</h2>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="aspect-square bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl flex items-center justify-center relative overflow-hidden">
+                                <div class="relative z-10">
+                                    <i class="fas fa-map-marker-alt w-24 h-24 text-blue-400"></i>
+                                    <p class="text-center text-gray-600 mt-4 font-medium">Peta Wilayah Indonesia</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-white rounded-2xl shadow-xl p-6">
+                            <h3 class="font-bold text-xl mb-4 flex items-center space-x-2">
+                                <i class="fas fa-exclamation-triangle w-6 h-6 text-red-500"></i>
+                                <span>Laporan Terkini</span>
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all duration-200 cursor-pointer">
+                                    <div class="flex items-start justify-between mb-2">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-2 mb-1">
+                                                <i class="fas fa-map-marker-alt w-4 h-4 text-gray-500"></i>
+                                                <span class="font-semibold text-gray-800">Bandung, Jawa Barat</span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mb-2">Ulat Grayak</p>
+                                        </div>
+                                        <span class="px-3 py-1 bg-red-500 rounded-full text-xs font-semibold text-white">
+                                            Tinggi
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                        <div class="flex items-center space-x-1">
+                                            <i class="fas fa-users w-4 h-4"></i>
+                                            <span>23 petani terdampak</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white shadow-xl">
+                            <h3 class="font-bold text-lg mb-3">Zona Aman</h3>
+                            <p class="text-green-100 mb-4">Area Anda saat ini dalam kondisi aman dari serangan hama berat</p>
+                            <button class="px-4 py-2 bg-white text-green-600 font-semibold rounded-lg hover:bg-green-50 transition-colors">
+                                Aktifkan Notifikasi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prediction Section -->
+        <section id="prediction-section" class="hidden py-12 min-h-screen">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-8">
+                    <button onclick="navigate('home')" class="text-green-600 hover:text-green-700 font-medium mb-4">
+                        ← Kembali
+                    </button>
+                    <h1 class="text-3xl sm:text-4xl font-bold mb-3">Prediksi Serangan Hama</h1>
+                    <p class="text-gray-600">AI memprediksi potensi serangan berdasarkan cuaca dan pola historis</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="p-3 bg-blue-100 rounded-lg">
+                                <i class="fas fa-cloud w-6 h-6 text-blue-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Cuaca Hari Ini</p>
+                                <p class="text-xl font-bold text-gray-800">Cerah Berawan</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-xs text-gray-500">Suhu</p>
+                                <p class="text-lg font-semibold text-gray-700">28°C</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Kelembaban</p>
+                                <p class="text-lg font-semibold text-gray-700">75%</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-lg p-6 text-white">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <i class="fas fa-check-circle w-8 h-8"></i>
+                            <div>
+                                <p class="text-sm text-green-100">Risiko Hari Ini</p>
+                                <p class="text-2xl font-bold">Rendah</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-green-100">Kondisi cuaca mendukung untuk pertumbuhan tanaman</p>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-xl shadow-lg p-6 text-white">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <i class="fas fa-exclamation-triangle w-8 h-8"></i>
+                            <div>
+                                <p class="text-sm text-orange-100">Peringatan 3 Hari</p>
+                                <p class="text-2xl font-bold">Tinggi</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-orange-100">Potensi serangan ulat grayak meningkat</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 mb-8">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <i class="fas fa-chart-line w-6 h-6 text-green-600"></i>
+                        <h2 class="text-2xl font-bold text-gray-800">Prediksi 7 Hari Kedepan</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all duration-200">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                <div class="flex items-center space-x-4 flex-1">
+                                    <div class="w-20">
+                                        <p class="font-semibold text-gray-800">Senin</p>
+                                        <p class="text-xs text-gray-500">Cerah</p>
+                                    </div>
+
+                                    <div class="flex items-center space-x-2 text-sm text-gray-600">
+                                        <i class="fas fa-cloud w-4 h-4"></i>
+                                        <span>28°C</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-gray-700">Risiko Serangan</span>
+                                        <span class="px-3 py-1 bg-green-500 rounded-full text-xs font-semibold text-white">
+                                            Rendah
+                                        </span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="h-2.5 rounded-full bg-green-500 transition-all duration-500" style="width: 25%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Assistant Section -->
+        <section id="assistant-section" class="hidden py-12 min-h-screen">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-8">
+                    <button onclick="navigate('home')" class="text-green-600 hover:text-green-700 font-medium mb-4">
+                        ← Kembali
+                    </button>
+                    <h1 class="text-3xl sm:text-4xl font-bold mb-3">Asisten Virtual AI</h1>
+                    <p class="text-gray-600">Konsultasi pertanian 24/7 dengan chatbot cerdas kami</p>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col h-[600px]">
+                    <div class="bg-gradient-to-r from-blue-500 to-cyan-600 p-6">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-white/20 p-2 rounded-lg">
+                                <i class="fas fa-robot text-white w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-white">AgriPest AI Assistant</h2>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                    <p class="text-blue-100 text-sm">Online</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-cyan-600">
+                                <i class="fas fa-robot text-white w-6 h-6"></i>
+                            </div>
+                            <div class="flex-1 max-w-[70%] items-start">
+                                <div class="rounded-2xl p-4 shadow-md bg-white text-gray-800">
+                                    <p class="text-sm leading-relaxed whitespace-pre-line">Halo! Saya Asisten Virtual AgriPest. Saya siap membantu Anda dengan pertanyaan seputar hama, penyakit tanaman, dan solusi pertanian. Apa yang bisa saya bantu hari ini?</p>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1 px-2">10:30</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 bg-white p-4">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <button onclick="sendMessage('Bagaimana cara mengatasi ulat grayak?')" class="px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-green-100 hover:text-green-700 transition-colors">
+                                Bagaimana cara mengatasi ulat grayak?
+                            </button>
+                            <button onclick="sendMessage('Pestisida organik apa yang aman?')" class="px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-green-100 hover:text-green-700 transition-colors">
+                                Pestisida organik apa yang aman?
+                            </button>
+                            <button onclick="sendMessage('Cara meningkatkan kualitas tanah?')" class="px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-green-100 hover:text-green-700 transition-colors">
+                                Cara meningkatkan kualitas tanah?
+                            </button>
+                            <button onclick="sendMessage('Kapan waktu terbaik penyemprotan?')" class="px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-green-100 hover:text-green-700 transition-colors">
+                                Kapan waktu terbaik penyemprotan?
+                            </button>
+                        </div>
+
+                        <div class="flex space-x-3">
+                            <input type="text" id="chat-input" placeholder="Ketik pertanyaan Anda..." class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors">
+                            <button onclick="sendUserMessage()" class="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                <i class="fas fa-paper-plane w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Section -->
+        <section id="community-section" class="hidden py-12 min-h-screen">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-8">
+                    <button onclick="navigate('home')" class="text-green-600 hover:text-green-700 font-medium mb-4">
+                        ← Kembali
+                    </button>
+                    <h1 class="text-3xl sm:text-4xl font-bold mb-3">Komunitas Petani</h1>
+                    <p class="text-gray-600">Berbagi pengalaman dan solusi dengan ribuan petani lainnya</p>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6 text-white shadow-lg">
+                        <i class="fas fa-users w-8 h-8 mb-3 opacity-80"></i>
+                        <div class="text-3xl font-bold mb-1">52,480</div>
+                        <div class="text-green-100">Anggota Aktif</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-6 text-white shadow-lg">
+                        <i class="fas fa-comment w-8 h-8 mb-3 opacity-80"></i>
+                        <div class="text-3xl font-bold mb-1">12,350</div>
+                        <div class="text-blue-100">Diskusi</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-6 text-white shadow-lg">
+                        <i class="fas fa-thumbs-up w-8 h-8 mb-3 opacity-80"></i>
+                        <div class="text-3xl font-bold mb-1">98%</div>
+                        <div class="text-purple-100">Tingkat Kepuasan</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex-1 relative">
+                            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                            <input type="text" placeholder="Cari diskusi, hama, atau solusi..." class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors">
+                        </div>
+                        <button class="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-xl shadow-md hover:shadow-lg flex items-center justify-center space-x-2 transform hover:scale-105 transition-all">
+                            <i class="fas fa-camera w-5 h-5"></i>
+                            <span>Buat Postingan</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                        P
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-gray-800">Pak Budi</h3>
+                                        <p class="text-sm text-gray-500">Bandung, Jawa Barat</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
+                                    Ulat Grayak
+                                </span>
+                            </div>
+
+                            <p class="text-gray-700 leading-relaxed mb-4">Berhasil mengatasi ulat grayak dengan ekstrak daun mimba! Hasilnya sangat efektif dalam 3 hari. Terima kasih AgriPest untuk rekomendasinya.</p>
+
+                            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                                <div class="flex items-center space-x-4">
+                                    <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600 transition-colors">
+                                        <i class="fas fa-thumbs-up w-5 h-5"></i>
+                                        <span class="text-sm font-medium">24</span>
+                                    </button>
+                                    <button class="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors">
+                                        <i class="fas fa-comment w-5 h-5"></i>
+                                        <span class="text-sm font-medium">8</span>
+                                    </button>
+                                </div>
+                                <span class="text-xs text-gray-400">2 jam yang lalu</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <h3 class="font-bold text-lg mb-4">Topik Populer</h3>
+                            <div class="space-y-3">
+                                <button class="w-full text-left px-4 py-3 bg-gray-50 hover:bg-green-50 rounded-lg transition-colors">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-medium text-gray-700">Ulat Grayak</span>
+                                        <span class="text-xs text-gray-500">342 diskusi</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl shadow-lg p-6 text-white">
+                            <i class="fas fa-comment w-8 h-8 mb-3 opacity-80"></i>
+                            <h3 class="font-bold text-lg mb-2">Butuh Bantuan?</h3>
+                            <p class="text-blue-100 text-sm mb-4">
+                                Tim ahli kami siap membantu menjawab pertanyaan Anda
+                            </p>
+                            <button class="w-full px-4 py-2 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors">
+                                Hubungi Ahli
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marketplace Section -->
+        <section id="marketplace-section" class="hidden py-12 min-h-screen">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-8">
+                    <button onclick="navigate('home')" class="text-green-600 hover:text-green-700 font-medium mb-4">
+                        ← Kembali
+                    </button>
+                    <h1 class="text-3xl sm:text-4xl font-bold mb-3">Marketplace Pertanian</h1>
+                    <p class="text-gray-600">Belanja kebutuhan pertanian dengan harga terjangkau</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6 text-white shadow-lg">
+                        <i class="fas fa-shopping-cart w-8 h-8 mb-3 opacity-80"></i>
+                        <div class="text-3xl font-bold mb-1">500+</div>
+                        <div class="text-green-100">Produk Tersedia</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-6 text-white shadow-lg">
+                        <i class="fas fa-star w-8 h-8 mb-3 opacity-80"></i>
+                        <div class="text-3xl font-bold mb-1">4.8/5</div>
+                        <div class="text-blue-100">Rating Toko</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-xl p-6 text-white shadow-lg">
+                        <i class="fas fa-shopping-cart w-8 h-8 mb-3 opacity-80"></i>
+                        <div class="text-3xl font-bold mb-1">15K+</div>
+                        <div class="text-orange-100">Transaksi Sukses</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex-1 relative">
+                            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                            <input type="text" placeholder="Cari produk, pestisida, pupuk..." class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors">
+                        </div>
+                        <button class="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2">
+                            <i class="fas fa-filter w-5 h-5"></i>
+                            <span>Filter</span>
+                        </button>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <button class="px-4 py-2 bg-green-500 text-white rounded-lg transition-all">
+                            Semua
+                        </button>
+                        <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-green-50 hover:text-green-700 transition-all">
+                            Pestisida
+                        </button>
+                        <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-green-50 hover:text-green-700 transition-all">
+                            Pupuk
+                        </button>
+                        <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-green-50 hover:text-green-700 transition-all">
+                            Alat
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                        <div class="aspect-square bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center text-8xl group-hover:scale-110 transition-transform duration-300">
+                            🌿
+                        </div>
+
+                        <div class="p-6">
+                            <div class="flex items-start justify-between mb-2">
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
+                                    Pestisida
+                                </span>
+                                <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">
+                                    Tersedia
+                                </span>
+                            </div>
+
+                            <h3 class="font-bold text-lg text-gray-800 mb-2 line-clamp-2">Pestisida Organik Mimba</h3>
+
+                            <div class="flex items-center space-x-2 mb-3">
+                                <div class="flex items-center">
+                                    <i class="fas fa-star text-yellow-500 w-4 h-4"></i>
+                                    <span class="text-sm font-semibold text-gray-700 ml-1">4.8</span>
+                                </div>
+                                <span class="text-sm text-gray-500">(234 ulasan)</span>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-2xl font-bold text-green-600">Rp85.000</p>
+                                    <p class="text-xs text-gray-500">Per unit</p>
+                                </div>
+                                <button class="p-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all">
+                                    <i class="fas fa-shopping-cart w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="bg-gradient-to-br from-green-500 to-emerald-600 p-2 rounded-xl">
+                            <i class="fas fa-leaf text-white w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">AgriPest Detect Pro</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Solusi AI terdepan untuk deteksi hama dan manajemen pertanian modern.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Fitur Utama</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li class="hover:text-green-400 cursor-pointer transition-colors">Scan Hama Real-Time</li>
+                        <li class="hover:text-green-400 cursor-pointer transition-colors">Peta Persebaran</li>
+                        <li class="hover:text-green-400 cursor-pointer transition-colors">Prediksi AI</li>
+                        <li class="hover:text-green-400 cursor-pointer transition-colors">Komunitas Petani</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Bantuan</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li class="hover:text-green-400 cursor-pointer transition-colors">Pusat Bantuan</li>
+                        <li class="hover:text-green-400 cursor-pointer transition-colors">Tutorial</li>
+                        <li class="hover:text-green-400 cursor-pointer transition-colors">FAQ</li>
+                        <li class="hover:text-green-400 cursor-pointer transition-colors">Hubungi Kami</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Kontak</h4>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-envelope w-4 h-4"></i>
+                            <span>support@agripest.co.id</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-phone w-4 h-4"></i>
+                            <span>+62 812-3456-7890</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-map-marker-alt w-4 h-4"></i>
+                            <span>Jakarta, Indonesia</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                        © 2024 AgriPest Detect Pro. All rights reserved.
+                    </p>
+                    <div class="flex space-x-6 text-sm text-gray-400">
+                        <a href="#" class="hover:text-green-400 transition-colors">
+                            Kebijakan Privasi
+                        </a>
+                        <a href="#" class="hover:text-green-400 transition-colors">
+                            Syarat & Ketentuan
+                        </a>
+                        <a href="#" class="hover:text-green-400 transition-colors">
+                            Lisensi
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fungsi untuk navigasi antar section
+        function navigate(section) {
+            // Sembunyikan semua section
+            document.querySelectorAll('main > section').forEach(sec => {
+                sec.classList.add('hidden');
+            });
+
+            // Tampilkan section yang dipilih
+            const targetSection = document.getElementById(section + '-section');
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
+
+            // Tutup mobile menu jika terbuka
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // Fungsi untuk toggle mobile menu
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Fungsi untuk mensimulasikan scan hama
+        function startScan() {
+            alert('Fitur scan akan membuka kamera perangkat Anda. Pastikan Anda memberikan izin akses kamera.');
+        }
+
+        // Fungsi untuk mengirim pesan di AI Assistant
+        function sendUserMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                sendMessage(message);
+                input.value = '';
+            }
+        }
+
+        function sendMessage(text) {
+            // Tambahkan pesan pengguna
+            const chatContainer = document.querySelector('.bg-gray-50');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'flex items-start space-x-3 flex-row-reverse space-x-reverse';
+            userMessage.innerHTML = `
+                <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-green-500 to-emerald-600">
+                    <i class="fas fa-user text-white w-6 h-6"></i>
+                </div>
+                <div class="flex-1 max-w-[70%] items-end">
+                    <div class="rounded-2xl p-4 shadow-md bg-gradient-to-r from-green-500 to-emerald-600 text-white">
+                        <p class="text-sm leading-relaxed whitespace-pre-line">${text}</p>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1 px-2">${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</p>
+                </div>
+            `;
+            chatContainer.appendChild(userMessage);
+
+            // Scroll ke bawah
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Simulasikan respons AI
+            setTimeout(() => {
+                const aiResponse = generateAIResponse(text);
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'flex items-start space-x-3';
+                aiMessage.innerHTML = `
+                    <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-cyan-600">
+                        <i class="fas fa-robot text-white w-6 h-6"></i>
+                    </div>
+                    <div class="flex-1 max-w-[70%] items-start">
+                        <div class="rounded-2xl p-4 shadow-md bg-white text-gray-800">
+                            <p class="text-sm leading-relaxed whitespace-pre-line">${aiResponse}</p>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1 px-2">${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</p>
+                    </div>
+                `;
+                chatContainer.appendChild(aiMessage);
+
+                // Scroll ke bawah lagi
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 1000);
+        }
+
+        function generateAIResponse(question) {
+            const lowerQuestion = question.toLowerCase();
+
+            if (lowerQuestion.includes('ulat grayak') || lowerQuestion.includes('ulat')) {
+                return 'Untuk mengatasi ulat grayak, saya rekomendasikan: 1) Aplikasi Bacillus thuringiensis (pestisida biologis), 2) Penyemprotan larutan bawang putih + cabai, 3) Pemasangan perangkap feromon, 4) Monitoring rutin setiap 2 hari. Waktu optimal penyemprotan adalah sore/malam hari saat ulat aktif makan.';
+            } else if (lowerQuestion.includes('pestisida organik') || lowerQuestion.includes('organik')) {
+                return 'Pestisida organik yang aman dan efektif: 1) Ekstrak daun mimba (neem), 2) Larutan bawang putih + cabai + sabun, 3) Ekstrak daun pepaya, 4) Campuran minyak nabati + detergen. Semua bahan ini ramah lingkungan dan tidak meninggalkan residu berbahaya.';
+            } else if (lowerQuestion.includes('tanah') || lowerQuestion.includes('kualitas')) {
+                return 'Untuk meningkatkan kualitas tanah: 1) Tambahkan kompos matang 2-3 ton/ha, 2) Terapkan sistem rotasi tanaman, 3) Tanam tanaman penutup tanah, 4) Hindari pembakaran jerami, gunakan sebagai mulsa, 5) Lakukan pengapuran jika pH terlalu asam. Scan tanah Anda dengan fitur Soil Scanner untuk analisis lebih detail!';
+            } else if (lowerQuestion.includes('penyemprotan') || lowerQuestion.includes('waktu')) {
+                return 'Waktu terbaik penyemprotan: 1) Pagi hari (06:00-09:00) atau sore hari (16:00-18:00), 2) Hindari saat terik matahari (mengurangi efektivitas), 3) Jangan semprot saat hujan atau angin kencang, 4) Periksa prediksi cuaca di fitur Prediksi Serangan kami untuk timing optimal.';
+            } else {
+                return 'Terima kasih atas pertanyaan Anda. Untuk informasi lebih spesifik, silakan: 1) Gunakan fitur Scan Hama untuk deteksi akurat, 2) Cek Peta Persebaran Hama di area Anda, 3) Lihat Prediksi Serangan untuk perencanaan, 4) Atau bergabung di Komunitas Petani untuk berbagi pengalaman. Ada yang bisa saya bantu lagi?';
+            }
+        }
+
+        // Inisialisasi: tampilkan home section
+        navigate('home');
+    </script>
+</body>
+</html>
